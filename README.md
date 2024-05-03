@@ -9,7 +9,7 @@ Learn Java Spring Boot 3
 - [x] Setup layer architecture (Controller - Service - Repository - Entity)
 - [x] Connect DB with JPA(Hibernate)
 - [x] Create API CRUD
-- [ ] Manager Exception & Validation
+- [x] Manager Exception & Validation
 - [ ] Standardized API Response
 - [ ] Use Lombok & Mapstruct
 - [ ] Bcrypt
