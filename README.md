@@ -10,9 +10,9 @@ Learn Java Spring Boot 3
 - [x] Connect DB with JPA(Hibernate)
 - [x] Create API CRUD
 - [x] Manager Exception & Validation
-- [ ] Standardized API Response
+- [x] Standardized API Response
 - [ ] Use Lombok & Mapstruct
-- [ ] Bcrypt
+- [ ] **Bcrypt**
 - [ ] Spring Security with JWT
   - [ ] Authentication
   - [ ] Authorization
