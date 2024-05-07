@@ -12,6 +12,8 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -32,12 +34,8 @@ public class UserService {
 
 
         User user = userMapper.toUser(request);
-//        user.setUsername(request.getUsername());
-//        user.setPassword(request.getPassword());
-//        user.setFirstName(request.getFirstName());
-//        user.setLastName(request.getLastName());
-//        user.setDob(request.getDob());
-
+        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
+        user.setPassword(passwordEncoder.encode(request.getPassword()));
         return userRepository.save(user);
     }
 
