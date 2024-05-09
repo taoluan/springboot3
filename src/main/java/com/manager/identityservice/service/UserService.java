@@ -4,6 +4,7 @@ import com.manager.identityservice.dto.request.UserCreationRequest;
 import com.manager.identityservice.dto.request.UserUpdateRequest;
 import com.manager.identityservice.dto.response.UserResponse;
 import com.manager.identityservice.entity.User;
+import com.manager.identityservice.enums.Role;
 import com.manager.identityservice.exception.AppException;
 import com.manager.identityservice.exception.ErrorCode;
 import com.manager.identityservice.mapper.UserMapper;
@@ -16,6 +17,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.List;
 
 @Service
@@ -36,6 +38,9 @@ public class UserService {
         User user = userMapper.toUser(request);
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
         user.setPassword(passwordEncoder.encode(request.getPassword()));
+        HashSet<String> roles = new HashSet<>();
+        roles.add(Role.USER.name());
+        user.setRoles(roles);
         return userRepository.save(user);
     }
 
@@ -53,11 +58,6 @@ public class UserService {
                 .orElseThrow(() -> new AppException(ErrorCode.USERNAME_NOTFOUND));
 
         userMapper.updateUser(user, request);
-//        user.setPassword(request.getPassword());
-//        user.setFirstName(request.getFirstName());
-//        user.setLastName(request.getLastName());
-//        user.setDob(request.getDob());
-
         return userMapper.toUserResponse(userRepository.save(user));
     }
 
