@@ -54,12 +54,11 @@ public class UserService {
     @PreAuthorize("hasRole('ADMIN')")
     public List<UserResponse> getUsers() {
         log.info("In method get Users");
-        return userRepository.findAll().stream()
-                .map(userMapper::toUserResponse).toList();
+        return userRepository.findAll().stream().map(userMapper::toUserResponse).toList();
     }
 
     // PostAuthorize:: Denied after call function
-    @PostAuthorize("returnObject.username == authentication.name || hasRole('ADMIN')")
+    @PostAuthorize("returnObject.username == authentication.name")
     public UserResponse getUser(String id) {
         log.info("In method get user by ID");
         return userMapper.toUserResponse(userRepository.findById(id)

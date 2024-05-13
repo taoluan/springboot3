@@ -33,16 +33,12 @@ public class UserController {
     }
 
     @GetMapping
-    ApiResponse<List<UserResponse>> getUser() {
-        var auth = SecurityContextHolder.getContext().getAuthentication();
-
-        log.info("Username: {}", auth.getName());
-        auth.getAuthorities().forEach(grantedAuthority -> log.info(grantedAuthority.getAuthority()));
-
-        ApiResponse<List<UserResponse>> apiResponse = new ApiResponse<>();
-        apiResponse.setResult(userService.getUsers());
-        return apiResponse;
+    ApiResponse<List<UserResponse>> getUsers() {
+        return ApiResponse.<List<UserResponse>>builder()
+                .result(userService.getUsers())
+                .build();
     }
+
 
     @GetMapping("/{userId}")
     ApiResponse<UserResponse> getUser(@PathVariable("userId") String userId) {

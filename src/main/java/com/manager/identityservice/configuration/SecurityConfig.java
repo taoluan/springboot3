@@ -26,7 +26,7 @@ import javax.crypto.spec.SecretKeySpec;
 @EnableMethodSecurity
 public class SecurityConfig {
 
-    private final String[] PUBLIC_ENDPOINT = {"users", "auth/login", "auth/introspect"};
+    private final String[] PUBLIC_ENDPOINTS = {"users", "auth/login", "auth/introspect"};
 
     private final String[] ROLE_ADMIN_ENDPOINT = {"users"};
 
@@ -36,19 +36,16 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
         // config public routes api
-        httpSecurity.authorizeHttpRequests(request ->
-                request.requestMatchers(HttpMethod.POST, PUBLIC_ENDPOINT).permitAll()
-
-//                        .requestMatchers(HttpMethod.GET, ROLE_ADMIN_ENDPOINT)
-//                        .hasRole(Role.ADMIN.name())
-
-                        .anyRequest()
-                        .authenticated());
+        httpSecurity.authorizeHttpRequests(request -> request.requestMatchers(HttpMethod.POST, PUBLIC_ENDPOINTS)
+                .permitAll()
+                .anyRequest()
+                .authenticated());
 
         // config authenticate with jwt
         httpSecurity.oauth2ResourceServer(oauth2 ->
                 oauth2.jwt(jwtConfigurer -> jwtConfigurer.decoder(jwtDecoder())
-                        .jwtAuthenticationConverter(jwtAuthenticationConverter()))
+                                .jwtAuthenticationConverter(jwtAuthenticationConverter()))
+                        .authenticationEntryPoint(new JwtAuthenticationEntryPoint())
         );
 
         // disable csrf
