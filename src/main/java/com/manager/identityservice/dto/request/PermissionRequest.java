@@ -1,25 +1,17 @@
-package com.manager.identityservice.entity;
+package com.manager.identityservice.dto.request;
 
-import jakarta.persistence.*;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDate;
-import java.util.Set;
 
-@Entity
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class Role {
-    @Id
+public class PermissionRequest {
     String name;
-
     String description;
-
-    @ManyToMany
-    Set<Permission> permissions;
 }
