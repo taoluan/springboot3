@@ -8,6 +8,7 @@ import com.manager.identityservice.enums.Role;
 import com.manager.identityservice.exception.AppException;
 import com.manager.identityservice.exception.ErrorCode;
 import com.manager.identityservice.mapper.UserMapper;
+import com.manager.identityservice.repository.RoleRepository;
 import com.manager.identityservice.repository.UserRepository;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -33,6 +34,8 @@ public class UserService {
 
     UserRepository userRepository;
     UserMapper userMapper;
+    PasswordEncoder passwordEncoder;
+    RoleRepository roleRepository;
 
     public User createUser(UserCreationRequest request) {
 
@@ -51,7 +54,8 @@ public class UserService {
 
 
     // PreAuthorize:: Denied before call function
-    @PreAuthorize("hasRole('ADMIN')")
+//    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAnyAuthority('CREATE_DATA')")
     public List<UserResponse> getUsers() {
         log.info("In method get Users");
         return userRepository.findAll().stream().map(userMapper::toUserResponse).toList();
@@ -79,6 +83,11 @@ public class UserService {
                 .orElseThrow(() -> new AppException(ErrorCode.USERNAME_NOTFOUND));
 
         userMapper.updateUser(user, request);
+        user.setPassword(passwordEncoder.encode(request.getPassword()));
+
+        var roles = roleRepository.findAllById(request.getRoles());
+        user.setRoles(new HashSet<>(roles));
+
         return userMapper.toUserResponse(userRepository.save(user));
     }
 
